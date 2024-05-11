@@ -1,0 +1,40 @@
+{{ block "index" . }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/chota.min.css">
+    <title>Timetracker</title>
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <h1>учёт времени</h1>
+        </div>
+        <div>
+            <form>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" name="project"
+                            placeholder="Задача" />
+                    </div>
+
+                    <div class="col">
+                        <input type="text" name="task" placeholder="Что делал" />
+                    </div>
+
+                    <div class="col-2">
+                        <input type="button" value="Начать"
+                            class="button primary">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
+{{ end }}
