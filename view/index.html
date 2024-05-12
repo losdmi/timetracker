@@ -11,13 +11,13 @@
 
 <body>
     <div class="container">
-        <div>
+        <div class="is-center">
             <h1>учёт времени</h1>
         </div>
         <div>
             <form>
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-2">
                         <input type="text" name="project"
                             placeholder="Задача" />
                     </div>
@@ -33,8 +33,43 @@
                 </div>
             </form>
         </div>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Задача</th>
+                        <th colspan="3">Что делал</th>
+                        <th>Начало</th>
+                        <th>Конец</th>
+                        <th>Длит.</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                {{ range .Records }}
+                {{ template "record" . }}
+                {{ end }}
+            </table>
+        </div>
     </div>
 </body>
 
 </html>
+{{ end }}
+
+{{ block "record" . }}
+<tr>
+    <td>{{ .Task }}</td>
+    <td colspan="3">{{ .Description }}</td>
+    <td>{{ .TimeStart.Format "15:04" }}</td>
+    <td>{{ .TimeEnd.Format "15:04" }}</td>
+    <td>{{ .Duration }}</td>
+    <td>
+        <button class="button icon-only clear">
+            <img src="https://icongr.am/fontawesome/edit.svg?size=24&color=000000            ">
+        </button>
+        <button class="button icon-only clear">
+            <img src="https://icongr.am/fontawesome/trash.svg?size=24&color=000000            ">
+        </button>
+    </td>
+</tr>
 {{ end }}

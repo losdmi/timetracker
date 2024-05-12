@@ -2,10 +2,12 @@ package internal
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
 
 	"github.com/losdmi/timetracker/internal/handler"
+	"github.com/losdmi/timetracker/internal/service"
 )
 
 type App struct {
@@ -18,7 +20,10 @@ func (a *App) Run() {
 }
 
 func BuildApp() *App {
-	handler := handler.NewHandler()
+	templates := template.Must(template.ParseGlob("view/*.html"))
+	service := service.NewService()
+
+	handler := handler.NewHandler(templates, service)
 	router := buildRoutes(handler)
 
 	server := &http.Server{

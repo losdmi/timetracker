@@ -1,13 +1,22 @@
 package handler
 
-import "html/template"
+import (
+	"html/template"
+
+	"github.com/losdmi/timetracker/internal/service"
+)
 
 type Handler struct {
 	templates *template.Template
+	service   *service.Service
 }
 
-func NewHandler() *Handler {
+func NewHandler(
+	templates *template.Template,
+	service *service.Service,
+) *Handler {
 	return &Handler{
-		templates: template.Must(template.ParseGlob("view/*.html")),
+		templates: templates,
+		service:   service,
 	}
 }

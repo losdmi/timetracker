@@ -5,7 +5,9 @@ import (
 )
 
 func (h *Handler) GetIndex(w http.ResponseWriter, r *http.Request) {
-	err := h.templates.ExecuteTemplate(w, "index", nil)
+	indexData := h.service.GetIndexData()
+
+	err := h.templates.ExecuteTemplate(w, "index", indexData)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
