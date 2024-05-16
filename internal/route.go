@@ -11,6 +11,7 @@ func buildRoutes(h *handler.Handler) http.Handler {
 
 	router.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	router.HandleFunc("GET /", h.GetIndex)
+	router.HandleFunc("POST /records", h.PostRecords)
 
 	return router
 }

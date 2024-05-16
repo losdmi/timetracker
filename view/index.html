@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/chota.min.css">
+    <script src="/static/htmx.min.js"></script>
     <title>Timetracker</title>
 </head>
 
@@ -15,23 +16,7 @@
             <h1>учёт времени</h1>
         </div>
         <div>
-            <form>
-                <div class="row">
-                    <div class="col-2">
-                        <input type="text" name="project"
-                            placeholder="Задача" />
-                    </div>
-
-                    <div class="col">
-                        <input type="text" name="task" placeholder="Что делал" />
-                    </div>
-
-                    <div class="col-2">
-                        <input type="button" value="Начать"
-                            class="button primary">
-                    </div>
-                </div>
-            </form>
+            {{ template "form" .Form }}
         </div>
         <div>
             <table>
@@ -56,6 +41,26 @@
 </html>
 {{ end }}
 
+{{ block "form" . }}
+<form hx-post="/records" hx-swap="outerHTML">
+    <div class="row">
+        <div class="col-2">
+            <input type="text" name="task" placeholder="Задача"
+                value="{{ .Task }}" class="{{ if .Errors.Task }}error{{ end }}" />
+        </div>
+
+        <div class="col">
+            <input type="text" name="description" placeholder="Что делал"
+                value="{{ .Description }}" class="{{ if .Errors.Description }}error{{ end }}" />
+        </div>
+
+        <div class="col-2">
+            <button type="submit" class="button primary">Начать</button>
+        </div>
+    </div>
+</form>
+{{ end }}
+
 {{ block "record" . }}
 <tr>
     <td>{{ .Task }}</td>
@@ -65,10 +70,12 @@
     <td>{{ .Duration }}</td>
     <td>
         <button class="button icon-only clear">
-            <img src="https://icongr.am/fontawesome/edit.svg?size=24&color=000000            ">
+            <img
+                src="https://icongr.am/fontawesome/edit.svg?size=24&color=000000            ">
         </button>
         <button class="button icon-only clear">
-            <img src="https://icongr.am/fontawesome/trash.svg?size=24&color=000000            ">
+            <img
+                src="https://icongr.am/fontawesome/trash.svg?size=24&color=000000            ">
         </button>
     </td>
 </tr>
