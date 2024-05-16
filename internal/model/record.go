@@ -1,6 +1,11 @@
 package model
 
-import "time"
+import (
+	"fmt"
+	"time"
+
+	"github.com/losdmi/timetracker/internal/model/dto"
+)
 
 type Record struct {
 	Task        string
@@ -11,8 +16,8 @@ type Record struct {
 
 type Records []Record
 
-func NewRecord(form AddRecordForm) (*Record, AddRecordForm) {
-	form = form.validate()
+func NewRecord(form dto.AddRecordForm) (*Record, dto.AddRecordForm) {
+	form = validateAddRecordForm(form)
 	if form.IsValid() {
 		return &Record{
 			Task:        form.Task,
@@ -21,6 +26,17 @@ func NewRecord(form AddRecordForm) (*Record, AddRecordForm) {
 	}
 
 	return nil, form
+}
+
+func validateAddRecordForm(f dto.AddRecordForm) dto.AddRecordForm {
+	if f.Task == "" {
+		f.Errors.Task = fmt.Errorf("task must be non-empty")
+	}
+	if f.Description == "" {
+		f.Errors.Description = fmt.Errorf("description must be non-empty")
+	}
+
+	return f
 }
 
 func (r *Record) Duration() time.Duration {

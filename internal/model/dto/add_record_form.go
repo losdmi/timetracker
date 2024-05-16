@@ -1,9 +1,6 @@
-package model
+package dto
 
-import (
-	"fmt"
-	"strings"
-)
+import "strings"
 
 type AddRecordFormErrors struct {
 	Task        error
@@ -23,22 +20,11 @@ type AddRecordForm struct {
 
 func NewAddRecordForm(task string, description string) AddRecordForm {
 	form := AddRecordForm{
-		Task:        task,
-		Description: description,
+		Task:        strings.TrimSpace(task),
+		Description: strings.TrimSpace(description),
 	}
 
 	return form
-}
-
-func (f AddRecordForm) validate() AddRecordForm {
-	if strings.TrimSpace(f.Task) == "" {
-		f.Errors.Task = fmt.Errorf("task must be non-empty")
-	}
-	if strings.TrimSpace(f.Description) == "" {
-		f.Errors.Description = fmt.Errorf("description must be non-empty")
-	}
-
-	return f
 }
 
 func (f AddRecordForm) IsValid() bool {
