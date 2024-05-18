@@ -65,8 +65,12 @@
 <tr>
     <td>{{ .Task }}</td>
     <td colspan="3">{{ .Description }}</td>
-    <td>{{ .TimeStart.Format "15:04" }}</td>
-    <td>{{ .TimeEnd.Format "15:04" }}</td>
+    <td>{{ .TimeStart.Local.Format "15:04" }}</td>
+    <td>
+        {{ if .TimeEnd }}
+        {{ .TimeEnd.Format "15:04" }}
+        {{ end }}
+    </td>
     <td>{{ .Duration }}</td>
     <td>
         <button class="button icon-only clear">

@@ -8,6 +8,7 @@ import (
 )
 
 type Record struct {
+	ID          uint64
 	Task        string
 	Description string
 	TimeStart   time.Time
@@ -26,7 +27,7 @@ func NewRecord(form dto.AddRecordForm) (*Record, dto.AddRecordForm) {
 		Task:        form.Task,
 		Description: form.Description,
 		TimeStart:   time.Now().UTC(),
-	}, form
+	}, dto.NewAddRecordForm("", "")
 }
 
 func validateAddRecordForm(f dto.AddRecordForm) dto.AddRecordForm {
@@ -40,11 +41,15 @@ func validateAddRecordForm(f dto.AddRecordForm) dto.AddRecordForm {
 	return f
 }
 
-func (r *Record) Duration() time.Duration {
-	timeEnd := time.Now().UTC()
+func (r *Record) Duration() string {
+	timeEnd := time.Now()
 	if r.TimeEnd != nil {
 		timeEnd = *r.TimeEnd
 	}
 
-	return timeEnd.Sub(r.TimeStart).Round(time.Minute)
+	duration := timeEnd.Sub(r.TimeStart).Round(time.Minute)
+	hours := int(duration.Minutes()) / 60
+	minutes := int(duration.Minutes()) % 60
+
+	return fmt.Sprintf("%d ч %d мин", hours, minutes)
 }
