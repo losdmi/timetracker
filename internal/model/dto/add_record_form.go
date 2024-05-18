@@ -8,7 +8,7 @@ type AddRecordFormErrors struct {
 }
 
 func (fe AddRecordFormErrors) isEmpty() bool {
-	return fe.Task == nil || fe.Description == nil
+	return fe.Task == nil && fe.Description == nil
 }
 
 type AddRecordForm struct {

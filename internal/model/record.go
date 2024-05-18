@@ -18,14 +18,15 @@ type Records []Record
 
 func NewRecord(form dto.AddRecordForm) (*Record, dto.AddRecordForm) {
 	form = validateAddRecordForm(form)
-	if form.IsValid() {
-		return &Record{
-			Task:        form.Task,
-			Description: form.Description,
-		}, form
+	if !form.IsValid() {
+		return nil, form
 	}
 
-	return nil, form
+	return &Record{
+		Task:        form.Task,
+		Description: form.Description,
+		TimeStart:   time.Now().UTC(),
+	}, form
 }
 
 func validateAddRecordForm(f dto.AddRecordForm) dto.AddRecordForm {

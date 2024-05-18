@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - data-volume:/var/lib/postgresql/data
+    environment:
+      - "POSTGRES_DB=${DB_DATABASE}"
+      - "POSTGRES_USER=${DB_USER}"
+      - "POSTGRES_PASSWORD=${DB_PASSWORD}"
+    ports:
+      # Если локальный порт конфликтует с другим сервисов - переопредели его в docker-compose.override.yaml
+      - "${DB_PORT}:5432"
+    command: ["postgres", "-c", "log_statement=all", "-c", "timezone=UTC"]
+
+volumes:
+  data-volume:

@@ -1,17 +1,22 @@
 package internal
 
 import (
+	"context"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/losdmi/timetracker/internal/handler"
+	"github.com/losdmi/timetracker/internal/repository"
 	"github.com/losdmi/timetracker/internal/service"
 )
 
 type App struct {
 	server *http.Server
+	dbpool *pgxpool.Pool
 }
 
 func (a *App) Run() {
@@ -20,8 +25,17 @@ func (a *App) Run() {
 }
 
 func BuildApp() *App {
+	ctx := context.Background()
+
 	templates := template.Must(template.ParseGlob("view/*.html"))
-	service := service.NewService()
+
+	dbpool, err := pgxpool.New(ctx, os.Getenv("DB_URL"))
+	if err != nil {
+		log.Fatalf("ошибка при соединении с БД: %s", err)
+	}
+
+	repository := repository.NewRepository(dbpool)
+	service := service.NewService(repository)
 
 	handler := handler.NewHandler(templates, service)
 	router := buildRoutes(handler)
@@ -33,5 +47,6 @@ func BuildApp() *App {
 
 	return &App{
 		server: server,
+		dbpool: dbpool,
 	}
 }

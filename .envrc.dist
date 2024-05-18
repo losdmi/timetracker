@@ -1,0 +1,9 @@
+export DB_DATABASE=timetracker
+export DB_PORT=54317
+export DB_USER=postgres
+export DB_PASSWORD=sample
+export DB_URL="postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_DATABASE}"
+
+export GOOSE_DRIVER=postgres
+export GOOSE_DBSTRING=${DB_URL}
+export GOOSE_MIGRATION_DIR=./migrations
