@@ -9,7 +9,7 @@ import (
 	"github.com/losdmi/timetracker/internal/model"
 )
 
-func (r *Repository) ReadDayRecords(ctx context.Context, now time.Time) (model.Records, error) {
+func (r *Repository) LoadPreviousUnfinishedRecord(ctx context.Context, now time.Time) (*model.Record, error) {
 	year, month, day := now.Date()
 	day_beginning := time.Date(year, month, day, 0, 0, 0, 0, now.Location())
 
@@ -24,18 +24,25 @@ func (r *Repository) ReadDayRecords(ctx context.Context, now time.Time) (model.R
 		Where(sq.And{
 			sq.GtOrEq{"time_start": day_beginning.UTC()},
 			sq.Lt{"time_start": day_beginning.AddDate(0, 0, 1).UTC()},
+			sq.Eq{"time_end": nil},
 		}).
-		OrderBy("time_start ASC")
+		OrderBy("time_start DESC").
+		Limit(1)
 
 	sql, args, err := b.ToSql()
 	if err != nil {
 		return nil, err
 	}
 
-	var result model.Records
-	err = pgxscan.Select(ctx, r.dbpool, &result, sql, args...)
+	var records model.Records
+	err = pgxscan.Select(ctx, r.dbpool, &records, sql, args...)
 	if err != nil {
 		return nil, err
+	}
+
+	var result *model.Record
+	if len(records) > 0 {
+		result = records[0]
 	}
 
 	return result, nil

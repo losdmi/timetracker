@@ -76,7 +76,7 @@
     <td>{{ .TimeStart.Local.Format "15:04" }}</td>
     <td>
         {{ if .TimeEnd }}
-        {{ .TimeEnd.Format "15:04" }}
+        {{ .TimeEnd.Local.Format "15:04" }}
         {{ end }}
     </td>
     <td>{{ .DurationString }}</td>

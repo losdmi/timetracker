@@ -15,7 +15,7 @@ type Record struct {
 	TimeEnd     *time.Time
 }
 
-type Records []Record
+type Records []*Record
 
 func NewRecord(form dto.AddRecordForm) (*Record, dto.AddRecordForm) {
 	form = validateAddRecordForm(form)
@@ -52,4 +52,12 @@ func (r *Record) DurationString() string {
 	minutes := int(duration.Minutes()) % 60
 
 	return fmt.Sprintf("%d ч %d мин", hours, minutes)
+}
+
+func (r *Record) Finish(now time.Time) {
+	if r.TimeEnd != nil {
+		return
+	}
+
+	r.TimeEnd = &now
 }
