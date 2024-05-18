@@ -41,7 +41,7 @@ func validateAddRecordForm(f dto.AddRecordForm) dto.AddRecordForm {
 	return f
 }
 
-func (r *Record) Duration() string {
+func (r *Record) DurationString() string {
 	timeEnd := time.Now()
 	if r.TimeEnd != nil {
 		timeEnd = *r.TimeEnd

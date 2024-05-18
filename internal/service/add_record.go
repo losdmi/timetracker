@@ -3,21 +3,33 @@ package service
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/losdmi/timetracker/internal/model"
-	"github.com/losdmi/timetracker/internal/model/dto"
+	modelDTO "github.com/losdmi/timetracker/internal/model/dto"
+	"github.com/losdmi/timetracker/internal/service/dto"
 )
 
-func (s *Service) AddRecord(ctx context.Context, form dto.AddRecordForm) (*model.Record, dto.AddRecordForm) {
+func (s *Service) AddRecord(ctx context.Context, form modelDTO.AddRecordForm) dto.AddRecordResponse {
 	record, form := model.NewRecord(form)
 	if record == nil {
-		return nil, form
+		return dto.AddRecordResponse{
+			Form: form,
+		}
 	}
 
 	err := s.repository.CreateRecord(ctx, *record)
 	if err != nil {
-		fmt.Printf("Service.AddRecord ошибка: %s", err)
+		fmt.Printf("Service.AddRecord ошибка при сохранении записи: %s", err)
 	}
 
-	return record, form
+	records, err := s.repository.ReadDayRecords(ctx, time.Now())
+	if err != nil {
+		fmt.Printf("Service.AddRecord ошибка при чтении записей: %s", err)
+	}
+
+	return dto.AddRecordResponse{
+		Records: records,
+		Form:    form,
+	}
 }

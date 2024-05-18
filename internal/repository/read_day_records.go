@@ -11,7 +11,7 @@ import (
 
 func (r *Repository) ReadDayRecords(ctx context.Context, now time.Time) (model.Records, error) {
 	year, month, day := now.Date()
-	day_beginning := time.Date(year, month, day, 0, 0, 0, 0, now.Location())
+	day_beginning := time.Date(year, month, day, 0, 0, 0, 0, time.Local)
 
 	b := sq.Select(
 		"id",
@@ -25,7 +25,7 @@ func (r *Repository) ReadDayRecords(ctx context.Context, now time.Time) (model.R
 			sq.GtOrEq{"time_start": day_beginning.UTC()},
 			sq.Lt{"time_start": day_beginning.AddDate(0, 0, 1).UTC()},
 		}).
-		OrderBy("time_start DESC")
+		OrderBy("time_start ASC")
 
 	sql, args, err := b.ToSql()
 	if err != nil {

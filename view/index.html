@@ -15,26 +15,10 @@
         <div class="is-center">
             <h1>учёт времени</h1>
         </div>
-        <div>
-            {{ template "form" .Form }}
-        </div>
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Задача</th>
-                        <th colspan="3">Что делал</th>
-                        <th>Начало</th>
-                        <th>Конец</th>
-                        <th>Длит.</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                {{ range .Records }}
-                {{ template "record" . }}
-                {{ end }}
-            </table>
-        </div>
+
+        {{ template "form" .Form }}
+
+        {{ template "records" . }}
     </div>
 </body>
 
@@ -42,23 +26,47 @@
 {{ end }}
 
 {{ block "form" . }}
-<form hx-post="/records" hx-swap="outerHTML">
-    <div class="row">
-        <div class="col-2">
-            <input type="text" name="task" placeholder="Задача"
-                value="{{ .Task }}" class="{{ if .Errors.Task }}error{{ end }}" />
-        </div>
+<div>
+    <form hx-post="/records" hx-swap="outerHTML">
+        <div class="row">
+            <div class="col-2">
+                <input type="text" name="task" placeholder="Задача"
+                    value="{{ .Task }}"
+                    class="{{ if .Errors.Task }}error{{ end }}" />
+            </div>
 
-        <div class="col">
-            <input type="text" name="description" placeholder="Что делал"
-                value="{{ .Description }}" class="{{ if .Errors.Description }}error{{ end }}" />
-        </div>
+            <div class="col">
+                <input type="text" name="description" placeholder="Что делал"
+                    value="{{ .Description }}"
+                    class="{{ if .Errors.Description }}error{{ end }}" />
+            </div>
 
-        <div class="col-2">
-            <button type="submit" class="button primary">Начать</button>
+            <div class="col-2">
+                <button type="submit" class="button primary">Начать</button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
+{{ end }}
+
+{{ block "records" . }}
+<div id="records" hx-swap-oob="true">
+    <table>
+        <thead>
+            <tr>
+                <th>Задача</th>
+                <th colspan="3">Что делал</th>
+                <th>Начало</th>
+                <th>Конец</th>
+                <th>Длит.</th>
+                <th></th>
+            </tr>
+        </thead>
+        {{ range .Records }}
+        {{ template "record" . }}
+        {{ end }}
+    </table>
+</div>
 {{ end }}
 
 {{ block "record" . }}
@@ -71,7 +79,7 @@
         {{ .TimeEnd.Format "15:04" }}
         {{ end }}
     </td>
-    <td>{{ .Duration }}</td>
+    <td>{{ .DurationString }}</td>
     <td>
         <button class="button icon-only clear">
             <img
