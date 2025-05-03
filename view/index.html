@@ -62,10 +62,16 @@
                 <th></th>
             </tr>
         </thead>
-        {{ range .Records }}
-        {{ template "record" . }}
-        {{ end }}
+        <tbody>
+            {{ range .Records }}
+            {{ template "record" . }}
+            {{ end }}
+        </tbody>
     </table>
+    <hr />
+    <div>
+        <b>Всего: 100 ч 500 мин</b>
+    </div>
 </div>
 {{ end }}
 
@@ -80,7 +86,13 @@
         {{ end }}
     </td>
     <td>{{ .DurationString }}</td>
-    <td>
+    <td class="is-right">
+        {{ if not .TimeEnd }}
+        <button class="button icon-only clear">
+            <img
+                src="https://icongr.am/fontawesome/stop-circle.svg?size=24&color=000000            ">
+        </button>
+        {{ end }}
         <button class="button icon-only clear">
             <img
                 src="https://icongr.am/fontawesome/edit.svg?size=24&color=000000            ">
